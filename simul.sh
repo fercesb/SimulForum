@@ -37,7 +37,7 @@ sendall(){
 ./freechains-host --port=$PORT3 start --data "$DATA_DIR/node3" --no-tui & HOST3_PID=$!
 ./freechains-host --port=$PORT4 start --data "$DATA_DIR/node4" --no-tui & HOST4_PID=$!
 
-# Delay para os hosts subirem
+# Delay para os hosts iniciarem
 sleep 2
 
 # Definindo timestampo inicial
@@ -67,7 +67,7 @@ done
 # Inicio da simulação 
 
 # Normal1 posta oferta através do nó1
-./freechains --host=localhost:$PORT1 chain $CHAIN post inline "Posição: Meia / Precisão de passes: 91% / Desarmes: 12 / Status: Aberta" --sing="$(< keys/Normal1_private.key)"
+./freechains --host=localhost:$PORT1 chain $CHAIN post inline "Posição: Meia / Precisão de passes: 91% / Desarmes: 12 / Status: Aberta" --sign="$(< keys/Normal1_private.key)"
 sendall $PORT1
 
 # Normal2 da like na oferta de Normal1 através do nó2
@@ -76,8 +76,8 @@ echo "$HEAD" > "$BASE_DIR/blocos.txt"
 ./freechains --host=localhost:$PORT2 chain $CHAIN like "$(< blocos.txt)" --sign="$(< keys/Normal2_private.key)"
 sendall $PORT2
 
-# Troll posta provocação através do nó3
-./freechains --host=localhost:$PORT3 chain $CHAIN post inline "Que jogador fraco!" --sing="$(< keys/Troll_private.key)"
+# Troll posta oferta falsa através do nó3
+./freechains --host=localhost:$PORT3 chain $CHAIN post inline "Posição: Goleiro / Altura: 270 / Status: Aberta" --sign="$(< keys/Troll_private.key)"
 sendall $PORT3
 
 # Avançar 10 dias
@@ -86,16 +86,12 @@ for port in $PORT1 $PORT2 $PORT3 $PORT4; do
   ./freechains-host now $TS_MONTH1 --port=$port
 done
 
-# Newbie faz pergunta através do nó4
-./freechains --host=localhost:$PORT4 chain $CHAIN post inline "Como encontrar ofertas?" --sing="$(< keys/Newbie_private.key)"
+# Newbie posta oferta vazia através do nó4
+./freechains --host=localhost:$PORT4 chain $CHAIN post inline "Posição:  / Gols:  / Status: Aberta" --sign="$(< keys/Newbie_private.key)"
 sendall $PORT4
 
-# Normal2 aceita oferta através do nó2
-./freechains --host=localhost:$PORT2 chain $CHAIN post inline "Normal1, vou querer o jogador" --sing="$(< keys/Normal2_private.key)"
-sendall $PORT2
-
 # Normal1 encerra oferta através do nó1
-./freechains --host=localhost:$PORT1 chain $CHAIN post inline "Posição: Meia / Precisão de passes: 91% / Desarmes: 12 / Status: Fechada" --sing="$(< keys/Normal1_private.key)"
+./freechains --host=localhost:$PORT1 chain $CHAIN post inline "Posição: Meia / Precisão de passes: 91% / Desarmes: 12 / Status: Fechada" --sign="$(< keys/Normal1_private.key)"
 sendall $PORT1
 
 # Avançar 30 dias
@@ -105,7 +101,7 @@ for port in $PORT1 $PORT2 $PORT3 $PORT4; do
 done
 
 # Troll posta oferta falsa através do nó3
-./freechains --host=localhost:$PORT3 chain $CHAIN post inline "Posição: Goleiro / Altura: 2,87m / Status: Aberta" --sing="$(< keys/Troll_private.key)"
+./freechains --host=localhost:$PORT3 chain $CHAIN post inline "Posição: Atacante / Gols: 690 / Status: Aberta" --sign="$(< keys/Troll_private.key)"
 sendall $PORT3
 
 # Normal1 da dislike na oferta de Troll através do nó2
@@ -125,7 +121,16 @@ for port in $PORT1 $PORT2 $PORT3 $PORT4; do
 done
 
 # Normal2 posta oferta através do nó2
-./freechains --host=localhost:$PORT2 chain $CHAIN post inline "Posição: Atacante / Gols: 37 / Status aberta" --sing="$(< keys/Normal2_private.key)"
+./freechains --host=localhost:$PORT2 chain $CHAIN post inline "Posição: Atacante / Gols: 37 / Status aberta" --sign="$(< keys/Normal2_private.key)"
 sendall $PORT2
+
+# Encerrando hosts
+./freechains-host --port=$PORT1 stop --no-tui & HOST1_PID=$!
+./freechains-host --port=$PORT2 stop --no-tui & HOST2_PID=$!
+./freechains-host --port=$PORT3 stop --no-tui & HOST3_PID=$!
+./freechains-host --port=$PORT4 stop --no-tui & HOST4_PID=$!
+
+# Delay para os hosts encerrarem
+sleep 2
 
 echo "=== FIM ==="
