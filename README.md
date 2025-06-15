@@ -1,5 +1,5 @@
 # A. Introdução
-Aplicação para negociação descentralizada de jogadores de futebol
+Aplicação descentralizada para agentes de jogadores de futebol de categorias de base negociarem entre si.
 
 # B. Natureza das mensagens
 - Normal1 e Normal2: Usuários comuns e bem-intencionados
@@ -11,6 +11,6 @@ Aplicação para negociação descentralizada de jogadores de futebol
 - Normal1 e Normal2 deram dislike em uma oferta falsa de Troll
 
 # D. Conclusão
-A simulação funcionou conforme a normalidade. Não exagerei no volume de mensagens pois seria repetitivo, já que a aplicação não irá permitir que o usuário digite o payload diretamente, apenas que insira valores que serão encaixados no template. Pelo mesmo motivo, não há brecha para mensagens ofensivas, apenas estatísticas falsas.
+A simulação funcionou conforme a normalidade. Não exagerei no volume de mensagens pois seria repetitivo, já que a aplicação não irá permitir que o usuário digite o payload diretamente, apenas que insira valores que serão encaixados no template. Pelo mesmo motivo não há brecha para mensagens ofensivas, apenas estatísticas falsas.
 
 
